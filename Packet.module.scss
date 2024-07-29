@@ -1,0 +1,294 @@
+/**
+ * Flatlogic Dashboards (https://flatlogic.com/admin-dashboards)
+ *
+ * Copyright © 2015-present Flatlogic, LLC. All rights reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.txt file in the root directory of this source tree.
+ */
+
+@import '../../styles/app';
+
+.root {
+  background: $navbar-bg-color;
+  background-size: auto;
+  padding: 10px 0;
+  margin-left: auto;
+  margin-right: auto;
+
+  :global {
+    .input-group {
+      // @include media-breakpoint-down(xs) {
+      //   display: none;
+      // }
+
+      .input-group-append {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        i {
+          font-size: 1.25rem;
+          color: theme-color('light');
+        }
+      }
+    }
+
+    .dropdown-menu {
+      border: none;
+      margin-top: 0.7rem;
+    }
+
+    .dropdown-item {
+      &:active {
+        background-color: $gray-200;
+        color: $text-color;
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      a {
+        display: block;
+        color: $text-color;
+
+        &:hover {
+          color: $text-color;
+          text-decoration: none;
+          cursor: default;
+        }
+      }
+    }
+  }
+}
+
+.arrow {
+  color: $gray-400;
+  transition: 0.3s;
+  right: 0;
+}
+
+.arrowActive {
+  transform: rotate(180deg);
+}
+
+.adminPhoto {
+  width: 40px;
+  height: 40px;
+}
+
+.headerIcon {
+  display: flex;
+  align-items: center;
+  position: relative;
+
+  @include media-breakpoint-down(sm) {
+    display: none;
+  }
+
+  :global .btn {
+    background: $white;
+    border: lightgoldenrodyellow;
+
+    &:hover,
+    &:active,
+    &:focus,
+    &:focus:active {
+      background: $white;
+      box-shadow: none !important;
+      outline: none;
+    }
+  }
+
+  &:nth-child(n + 2) {
+    margin-left: 0.5rem;
+  }
+
+  &:nth-child(2) {
+    span {
+      right: -1px;
+    }
+  }
+
+  img {
+    max-height: 1.65rem;
+    width: 1.65rem;
+  }
+
+  span {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 12px;
+    right: -6px;
+    color: $white;
+    font-size: 0.55rem;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: theme-color('danger');
+  }
+}
+
+.sidebarToggler {
+  display: flex;
+
+  @include media-breakpoint-up(md) {
+    display: none !important;
+  }
+}
+
+.usersTable {
+  th,
+  td {
+    border-color: $white;
+    padding: 0.5rem 0.5rem;
+  }
+
+  thead {
+    border-bottom: 1px solid $gray-200;
+  }
+}
+.butt {
+  border-radius: 2px;
+  width: 100 px;
+}
+.mainTable {
+  td,
+  thead {
+    border-top: 1px solid $gray-200;
+    padding: 0.5rem 0.5rem;
+  }
+
+  thead th {
+    color: theme-color('light');
+    text-transform: uppercase;
+  }
+}
+
+.input-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-container .react-datepicker-wrapper {
+  margin: 12px 0;
+  width: 100%;
+}
+
+.input-container .react-datepicker-wrapper input {
+  padding: 4px 12px;
+}
+
+.picker {
+  grid-column: 5/10;
+  grid-row: 2/4;
+  // background: cornflowerblue;
+
+  padding-bottom: 50px;
+
+  input {
+    font-size: 80px;
+    font-family: 'Roboto Condensed';
+    font-weight: bold;
+
+    text-align: center;
+    border: none;
+    background-color: transparent;
+    border-bottom: 2px solid #e3b924;
+    &:focus {
+      outline: none;
+    }
+  }
+}
+.tex {
+  font-size: 30px;
+}
+
+table td.crossed {
+  background-image: linear-gradient(
+    to top right,
+    transparent calc(50% - 1px),
+    rgb(0, 0, 0),
+    transparent calc(50% + 1px)
+  );
+  font-size: 12px;
+}
+
+.contentBoxPickupModal{
+  padding: 24px;
+  font-size: 14px;
+  line-height: 1.5;
+  .headerPickupModal {
+    display: flex;
+    padding-top: 20px;
+    gap: 30px;
+    .headerItem {
+      text-align: center;
+      border-spacing: 5px;
+      &:hover {
+        color: #40a9ff;
+        cursor: pointer;
+      }
+    }
+    .headerItemChecked {
+      color: #1890ff;
+      text-shadow: 0 0 .25px currentColor;
+      border-bottom: 3px solid #1890ff;
+    }
+  }
+
+  .bodyPickupModal {
+    border: 1px solid #e8e8e8;
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 10px 20px;
+    .pickupDateTimeModal{
+      width: 100%;
+      height: calc(1.5em + 0.75rem + 2px);
+      border: 1px solid #ccc
+    }
+  }
+}
+
+
+.datePickerFilter {
+  max-width: 90px;
+}
+
+.btnStyle {
+  max-width: 100px;
+  display: block;
+}
+
+// .tableHover tbody tr:hover td:not(.fancy),
+// .tableHover tbody tr:hover th:not(.fancy) {
+//   background-color: #6890b8;
+// }
+
+.tableHover tbody tr:not(.fancy):hover td {
+  background-color: #6890b8;
+}
+
+.tableHover {
+  // border: 1px solid black;
+  padding: 5px;
+  .pickupIcon {
+    img {
+      width: 25px;
+      margin: 0;
+    }
+  }
+  .fancy{
+    display: none;
+  }
+}
+
+.btn-wrap .input-group span {
+  margin-bottom: 5px;
+}

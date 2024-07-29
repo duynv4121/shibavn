@@ -1,0 +1,5 @@
+referenceNo,serviceType,recipientName,phone,email,addressLine1,addressLine2,city,state,postcode,country,instruction,itemCount,description,unitValue,weight,height,length,width,dimensionUnit,weightUnit,shipperName,finalMileInjectionLocation
+KGTP1136314,AUPOST,Mr. David,61106567430,customer@kangoexp.vn,18 Gilbert Road,,Marangaroo,WA,6064,AU,,3,Clothing set,325.4,22,5,4,12,cm,KG,Kango P,SYD
+,,,,,,,,,,,,,,,20,30,30,10,,,,
+,,,,,,,,,,,,,,,20,30,40,10,,,,
+KGTP1136315,AUPOST,Mr. Truccc,61106567430,customer@kangoexp.vn,18 Gilbert Road,,Marangaroo,WA,6064,AU,,1,Clothing set,325.4,21,5,4,12,cm,KG,Kango P,SYD

@@ -1,0 +1,44 @@
+
+html {
+	font-size:62.5%;
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+ul, li {
+	list-style: none;
+}
+input {
+	border: none;
+}
+body {
+  width: 6.4rem;
+}.vector-wnh {
+  width: 100%;
+  overflow: hidden;
+  align-items: center;
+  display: flex;
+  border: dashed 0.1rem #9747ff;
+  box-sizing: border-box;
+  padding: 2rem;
+  position: relative;
+  flex-direction: column;
+  border-radius: 0.5rem;
+
+  .property-1default-6Qh {
+    width: 2.4rem;
+    height: 2.3rem;
+    object-fit: contain;
+    vertical-align: top;
+    flex-shrink: 0;
+    margin-bottom: 2rem;
+  }
+  .property-1selected-EWu {
+    vertical-align: top;
+    flex-shrink: 0;
+    width: 2.4rem;
+    height: 2.3rem;
+    object-fit: contain;
+  }
+}

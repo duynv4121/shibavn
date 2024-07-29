@@ -1,0 +1,1 @@
+<a class="collapse-item" href="partner_m.php">Partner</a>
