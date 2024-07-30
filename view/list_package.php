@@ -24,6 +24,31 @@
    </div> --> 
    
    <?php
+
+	if (isset($_POST['action'])) {
+		$action = $_POST['action'];
+
+		switch ($action) {
+			case 'update_cuoc_goc':
+				$id = $_POST['id'];
+				$newValue = $_POST['newValue'];
+
+				mysqli_query($conn,'UPDATE `ns_package` SET `cuoc_goc`=' . $newValue . '  WHERE `id`=' .$id .'');
+
+				break;
+
+			case 'update_khach_phu_thu':
+				$id = $_POST['id'];
+				$newValue = $_POST['newValue'];
+
+				mysqli_query($conn,'UPDATE `ns_package` SET `khach_phuthu`=' . $newValue . '  WHERE `id`=' .$id .'');
+
+				break;
+		}
+
+		return;
+	}
+
    
    if(isset($_POST['btn_deletea']))
 	{
@@ -223,8 +248,8 @@ echo'			<hr>
                   <th style="text-align: center;color:white">Chi nhánh</th>
                   <th style="text-align: center;color:white">Trạng thái</th>
                   <th style="text-align: center;color:white">Tracking</th>
-                  <th style="text-align: center;color:white">Cước gốc</th>
-                  <th style="text-align: center;color:white">Phụ thu</th>
+                  <th width="16%" style="text-align: center;color:white">Cước gốc</th>
+                  <th width="16%" style="text-align: center;color:white">Phụ thu</th>
 				  <?php
 				  if($roleid == 1 || $roleid == 3)
 				  {
@@ -453,8 +478,29 @@ echo'			<hr>
 				  
 				  $laydulieutrack = mysqli_fetch_assoc(mysqli_query($conn,"select * from ns_listhoadon where id_package='".$item['id']."' LIMIT 1"));
 				  echo'<td  style="text-align: left; color:blue"><a href="'.$tracking_url.''.$item['id_code'].'">'.@$laydulieutrack['id_code'].'</a></td>';
-				  echo'<td  style="text-align: left; color:green">'.number_format($item['cuoc_goc']).'đ</td>';
-				  echo'<td  style="text-align: left; color:green">'.number_format($item['khach_phuthu']).'đ</td>';
+
+					if ($item['cuoc_goc'] != null) {
+						echo '<td data-cuoc_goc="' . $item['cuoc_goc'] . '" data-id="' . $item['id'] . '" style="text-align: left; color:green">' . number_format($item['cuoc_goc']) . 'đ';
+							if (in_array($roleid, [1, 3])) { // Admin va ke toan
+								echo ' <i style="float:right; cursor:pointer" class="fas fa-edit updateCuocGoc"></i>';
+							}
+						echo '</td>';
+					} else {
+						echo '<td data-cuoc_goc="' . $item['cuoc_goc'] . '" data-id="' . $item['id'] . '">
+								<small class="badge badge-danger"><i class="fas fa-minus-circle"></i> 
+									Chưa cập nhật
+								</small>';
+						if (in_array($roleid, [1, 3])) { // Admin va ke toan
+							echo '<i style="float:right; cursor:pointer; color:green" class="fas fa-edit updateCuocGoc"></i>';
+						}
+						echo '</td>';
+					}
+
+					echo '<td data-khach_phu_thu="' . $item['khach_phuthu'] . '" data-id="' . $item['id'] . '" style="text-align: left; color:green">' . number_format($item['khach_phuthu']) . 'đ';
+						if (in_array($roleid, [1, 3])) { // Admin va ke toan
+							echo ' <i style="float:right; cursor:pointer" class="fas fa-edit updateKhachPhuThu"></i>';
+						}
+					echo '</td>';
 			
 				   if($roleid == 1 || $roleid == 3)
 				  {
@@ -473,7 +519,7 @@ echo'			<hr>
 					  echo'<td>';
 					  
 					  
-					  if($item['cuoc_goc'] != "")
+					  if($item['cuoc_goc'] !== null)
 					  {
 										  echo'<small class="badge badge-success"><i class="fas fa-dollar-sign"></i>'.number_format( $item['khach_cuocbay']-($item['khach_cuocnoidia']+$item['khach_phuthu']+$item['khach_thuho']+$item['khach_phibaohiem']+($item['vat']*8/100)+$item['cuoc_goc'])-$sotienchiphi).'đ</small>';
 	  
@@ -662,6 +708,75 @@ echo'			<hr>
 <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
 
 <script type="text/javascript">
+	$(document).ready(function() {
+		$('table').on('click', '.updateCuocGoc', function() {
+			var $td = $(this).closest('td');
+			var id = $td.data('id');
+			var oldValueCuocGoc = $td.data('cuoc_goc');
+
+			if (!$td.hasClass('edit-mode')) {
+				$td.addClass('edit-mode');
+				$td.html('<input type="text" value="' + oldValueCuocGoc + '"><i style="cursor:pointer; color:green" class="fas fa-save btn-update-cuoc-goc" data-id="' + id + '"></i>');
+			}
+		});
+
+		$('table').on('click', '.updateKhachPhuThu', function() {
+			var $td = $(this).closest('td');
+			var id = $td.data('id');
+			var oldValueKhachPhuThu = $td.data('khach_phu_thu');
+
+			if (!$td.hasClass('edit-mode')) {
+				$td.addClass('edit-mode');
+				$td.html('<input type="text" value="' + oldValueKhachPhuThu + '"><i style="cursor:pointer; color:green" class="fas fa-save btn-update-khach-phu-thu" data-id="' + id + '"></i>');
+			}
+		});
+
+		$('table').on('click', '.btn-update-cuoc-goc', function() {
+			var $td = $(this).closest('td');
+			var newValue = $td.find('input').val();
+			var id = $(this).data('id');
+
+			$.ajax({
+				url: 'list_package.php',
+				type: 'POST',
+				data: {
+					action: 'update_cuoc_goc',
+					id: id,
+					newValue: newValue
+				},
+				success: function(response) {
+					location.reload();
+				},
+				error: function(xhr, status, error) {
+					console.error(xhr.responseText);
+				}
+			});
+		});
+
+		$('table').on('click', '.btn-update-khach-phu-thu', function() {
+			var $td = $(this).closest('td');
+			var newValue = $td.find('input').val();
+			var id = $(this).data('id');
+
+			$.ajax({
+				url: 'list_package.php',
+				type: 'POST',
+				data: {
+					action: 'update_khach_phu_thu',
+					id: id,
+					newValue: newValue
+				},
+				success: function(response) {
+					location.reload();
+				},
+				error: function(xhr, status, error) {
+					console.error(xhr.responseText);
+				}
+			});
+		});
+	});
+
+
    $('#modalInScanPackage').on('show.bs.modal', function (event) {
        var button = $(event.relatedTarget); 
        var recipient = button.data('whatever');
@@ -689,21 +804,22 @@ echo'			<hr>
   
    
 	$(document).ready(function() {
-    $('#example').DataTable( {
-		  "pageLength": 100
-,
-        responsive: {
-            details: {
-                type: 'column'
-            }
-        },
-        columnDefs: [ {
-            className: 'dtr-control',
-            orderable: false,
-            targets:   0
-        } ],
-        order: [ 3, 'desc' ]
-    } );
-} );
+		$('#example').DataTable({
+			"pageLength": 100,
+			"scrollX": true,
+			responsive: {
+				details: {
+					type: 'column'
+				}
+			},
+			columnDefs: [ {
+				className: 'dtr-control',
+				orderable: false,
+				targets:   2,
+				"visible": false,
+			} ],
+			order: [ 3, 'desc' ]
+		});
+	});
 
 </script>
