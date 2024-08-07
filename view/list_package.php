@@ -44,6 +44,13 @@ loadModalScanPackage();
 				mysqli_query($conn, 'UPDATE `ns_package` SET `khach_phuthu`=' . $newValue . '  WHERE `id`=' . $id . '');
 
 				break;
+			case 'update_khach_cuoc_bay':
+				$id = $_POST['id'];
+				$newValue = $_POST['newValue'];
+
+				mysqli_query($conn, 'UPDATE `ns_package` SET `khach_cuocbay`=' . $newValue . '  WHERE `id`=' . $id . '');
+
+				break;
 		}
 
 		return;
@@ -270,6 +277,7 @@ loadModalScanPackage();
 						<th style="text-align: center;color:white">Tracking</th>
 						<th width="16%" style="text-align: center;color:white">Cước gốc</th>
 						<th width="16%" style="text-align: center;color:white">Phụ thu</th>
+						<th width="16%" style="text-align: center;color:white">Giá thu khách</th>
 						<?php
 						if ($roleid == 1 || $roleid == 3) {
 							echo '                  <th style="text-align: center;color:white">Lợi nhuận</th>
@@ -458,6 +466,23 @@ loadModalScanPackage();
 							echo ' <i style="float:right; cursor:pointer" class="fas fa-edit updateKhachPhuThu"></i>';
 						}
 						echo '</td>';
+
+						if ($item['khach_cuocbay'] != null) {
+							echo '<td data-khach_cuocbay="' . $item['khach_cuocbay'] . '" data-id="' . $item['id'] . '" style="text-align: left; color:green">' . number_format($item['khach_cuocbay']) . 'đ';
+							if (in_array($roleid, [1, 3])) { // Admin va ke toan
+								echo ' <i style="float:right; cursor:pointer" class="fas fa-edit updateKhachCuocBay"></i>';
+							}
+							echo '</td>';
+						} else {
+							echo '<td data-khach_cuocbay="' . $item['khach_cuocbay'] . '" data-id="' . $item['id'] . '">
+								<small class="badge badge-danger"><i class="fas fa-minus-circle"></i> 
+									Chưa cập nhật
+								</small>';
+							if (in_array($roleid, [1, 3])) { // Admin va ke toan
+								echo '<i style="float:right; cursor:pointer; color:green" class="fas fa-edit updateKhachCuocBay"></i>';
+							}
+							echo '</td>';
+						}
 
 						if ($roleid == 1 || $roleid == 3) {
 
@@ -668,6 +693,17 @@ include('footer.php');
 			}
 		});
 
+		$('table').on('click', '.updateKhachCuocBay', function() {
+			var $td = $(this).closest('td');
+			var id = $td.data('id');
+			var oldValueKhachPhuThu = $td.data('khach_cuocbay');
+
+			if (!$td.hasClass('edit-mode')) {
+				$td.addClass('edit-mode');
+				$td.html('<input type="text" value="' + oldValueKhachPhuThu + '"><i style="cursor:pointer; color:green" class="fas fa-save btn-update-khach-cuoc-bay" data-id="' + id + '"></i>');
+			}
+		});
+
 		$('table').on('click', '.btn-update-cuoc-goc', function() {
 			var $td = $(this).closest('td');
 			var newValue = $td.find('input').val();
@@ -700,6 +736,28 @@ include('footer.php');
 				type: 'POST',
 				data: {
 					action: 'update_khach_phu_thu',
+					id: id,
+					newValue: newValue
+				},
+				success: function(response) {
+					location.reload();
+				},
+				error: function(xhr, status, error) {
+					console.error(xhr.responseText);
+				}
+			});
+		});
+
+		$('table').on('click', '.btn-update-khach-cuoc-bay', function() {
+			var $td = $(this).closest('td');
+			var newValue = $td.find('input').val();
+			var id = $(this).data('id');
+
+			$.ajax({
+				url: 'list_package.php',
+				type: 'POST',
+				data: {
+					action: 'update_khach_cuoc_bay',
 					id: id,
 					newValue: newValue
 				},
